@@ -14,6 +14,9 @@ def get_company_name(comp_name):
 
 def get_daily_google_data(kw_list, from_year, from_month):
     # kw_list - [0] ticker, [1] full name, [2] name without corporation classification
+    if not path.exists(f'googledata'):
+        os.mkdir('googledata')
+
 
     if path.exists(f'googledata/{kw_list[0]}.csv'):
         df = pd.read_csv(f'googledata/{kw_list[0]}.csv').set_index('Date')

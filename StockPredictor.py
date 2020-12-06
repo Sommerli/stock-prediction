@@ -120,6 +120,12 @@ def get_scaled_target_price(df):
     return [scaled_target_price, target_price_scaler]
 
 
+def get_actual_target_price(df):
+    temp = get_scaled_target_price(df)
+    scaled_target_price = np.array(temp[0]).ravel()
+    return temp[1].inverse_transform(scaled_target_price)
+
+
 def get_pca_data(df):
     # Setup PCA-scaler
     pca_scaler = StandardScaler()  # StandardScaler scales columnwise
@@ -144,7 +150,8 @@ def predict_by_mlp(df):
 
     mlp_regr = MLPRegressor(random_state=1, max_iter=500).fit(X_train, y_train)
     mlp_prediction = mlp_regr.predict(input_X)
-    return [temp[1].inverse_transform(mlp_prediction), temp[1].inverse_transform(scaled_target_price)]
+
+    return temp[1].inverse_transform(mlp_prediction)
 
 
 def predict_by_svm(df):
@@ -157,4 +164,4 @@ def predict_by_svm(df):
 
     scaled_svm = svm.SVR(gamma='auto')
     scaled_svm.fit(X_train, y_train)
-    return temp[1].inverse_transform(scaled_svm.predict(pca_data))
+    return temp[1].inverse_transform(scaled_svm.predict(input_X))
