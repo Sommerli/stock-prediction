@@ -16,7 +16,9 @@ def get_daily_google_data(kw_list, from_year, from_month):
     # kw_list - [0] ticker, [1] full name, [2] name without corporation classification
 
     if path.exists(f'googledata/{kw_list[0]}.csv'):
-        return pd.read_csv(f'googledata/{kw_list[0]}.csv', index_col="Date")  # .set_index('date', inplace=True)
+        df = pd.read_csv(f'googledata/{kw_list[0]}.csv').set_index('Date')
+        df.index = pd.to_datetime(df.index)
+        return df
     else:
         df = pd.DataFrame()
         for kw in kw_list:
